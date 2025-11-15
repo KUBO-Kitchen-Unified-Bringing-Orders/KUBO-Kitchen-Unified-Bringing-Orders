@@ -1,0 +1,256 @@
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+ 
+    background-color: #D9BB9B; 
+    color: #333;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    min-height: 100vh; 
+}
+
+
+.navbar-container {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); 
+    background-color: #AB8864; 
+    padding: 10px 0;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-content {
+    width: 90%;
+    max-width: 1200px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.2em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 50px; 
+    margin-right: 8px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #FFFFFF;
+    margin-left: 20px;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #376C9B;
+}
+
+.login-button {
+    background-color: #376C9B; 
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+
+.rider-grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 25px; 
+    width: 90%;
+    max-width: 900px; 
+    justify-content: center; 
+}
+
+
+.rider-card-link {
+    text-decoration: none;
+    color: inherit; 
+}
+
+.rider-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.2s;
+}
+
+.rider-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rider-card-empty {
+
+    visibility: hidden; 
+}
+
+.photo-placeholder {
+    height: 180px;
+    background-color: #F8F8F8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #AAA;
+    font-size: 1.1em;
+}
+
+.rider-name {
+    padding: 10px 0;
+    text-align: center;
+    background-color: #AECADF; 
+    color: #333;
+    font-weight: 600;
+}
+
+
+.details-page-container {
+    width: 90%;
+    max-width: 700px;
+    margin: 40px auto; 
+    flex-grow: 1; 
+}
+
+.rider-info-card {
+    background-color: white; 
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    overflow: hidden; 
+}
+
+.info-section {
+    background-color: #AECADF; 
+    padding: 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.info-section h2 {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #376C9B; 
+}
+
+.info-section p {
+    margin: 8px 0;
+}
+
+.note-section {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.note-section label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.note-section textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical; 
+    box-sizing: border-box; 
+    font-family: inherit;
+}
+
+.done-button {
+    align-self: flex-end; 
+    background-color: #AECADF; 
+    color: #333;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.done-button:hover {
+    background-color: #8faec9; 
+}
+
+
+@media (max-width: 768px) {
+    .rider-grid-container {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 500px) {
+    .rider-grid-container {
+        grid-template-columns: 1fr;
+    }
+    .navbar-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav {
+        margin-top: 10px;
+    }
+}
+
+
+.login-card {
+    max-width: 450px; 
+}
+
+.login-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form label {
+    font-weight: 600;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login-submit-button {
+    align-self: center; 
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding: 10px 30px;
+    font-size: 1.1em;
+}
+
+.forgot-password-link {
+    text-align: center;
+    color: #376C9B;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
