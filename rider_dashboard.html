@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Dashboard - KUBO</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar-container">
+        <div class="navbar-content">
+            <span class="logo">
+                <img src="kubopic.png" alt="KUBO Logo" class="logo-img">
+                KUBO
+            </span>
+            <nav>
+                <a href="index.html" id="home-link">Home</a>
+                <a href="about_us.html">About Us</a>
+                <a href="login.html" class="login-button" id="login-profile-link">Login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="details-page-container">
+        <div class="rider-info-card">
+            <div class="info-section">
+                <h2>RIDER DASHBOARD</h2>
+                <p id="rider-welcome">Welcome, <span id="rider-name-display">-</span></p>
+                <button class="logout-button" id="rider-logout-button" style="margin-top: 15px;">Logout</button>
+            </div>
+            <div class="note-section">
+                <h3 style="margin-top: 0; margin-bottom: 20px; color: #333;">Available Orders</h3>
+                <div id="orders-container">
+                    <!-- Orders will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="auth.js"></script>
+    <script src="rider_dashboard.js"></script>
+</body>
+</html>
+

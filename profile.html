@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profile - KUBO</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar-container">
+        <div class="navbar-content">
+            <span class="logo">
+                <img src="kubopic.png" alt="KUBO Logo" class="logo-img">
+                KUBO
+            </span>
+            <nav>
+                <a href="index.html" id="home-link">Home</a>
+                <a href="about_us.html">About Us</a>
+                <a href="login.html" class="login-button" id="login-profile-link">Profile</a>
+            </nav>
+        </div>
+    </header>
+    <main class="profile-page-container">
+        <div class="profile-layout">
+            <!-- Left Section: MY PROFILE -->
+            <div class="profile-section">
+                <h2 class="profile-title">MY PROFILE</h2>
+                <div class="profile-info">
+                    <p><strong>Name:</strong> <span id="profile-name">-</span></p>
+                    <p><strong>Address:</strong> <span id="profile-address">-</span></p>
+                    <p><strong>Gender:</strong> <span id="profile-gender">-</span></p>
+                </div>
+                <button class="logout-button" id="logout-button">Log Out</button>
+            </div>
+
+            <!-- Right Section: Orders/Deliveries -->
+            <div class="orders-section">
+                <h2 class="orders-title">Orders/Deliveries</h2>
+                <div class="orders-list" id="orders-list">
+                    <!-- Orders will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="auth.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>
+
