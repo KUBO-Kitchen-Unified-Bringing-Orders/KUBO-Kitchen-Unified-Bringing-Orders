@@ -38,6 +38,16 @@ function loadAllOrders() {
     const ordersContainer = document.getElementById('orders-container');
     ordersContainer.innerHTML = '';
     
+    // Get current logged-in rider
+    const currentRider = localStorage.getItem('currentRider');
+    if (!currentRider) {
+        ordersContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Please login as a rider.</p>';
+        return;
+    }
+    
+    const rider = JSON.parse(currentRider);
+    const riderNumber = rider.riderNumber;
+    
     // Get all customer accounts
     const customerAccounts = JSON.parse(localStorage.getItem('customerAccounts') || '[]');
     
@@ -48,17 +58,20 @@ function loadAllOrders() {
     
     let allOrders = [];
     
-    // Collect all orders from all customers
+    // Collect all orders from all customers, but only for this specific rider
     customerAccounts.forEach(customer => {
         const ordersKey = 'customerOrders_' + customer.username;
         const customerOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
         
         customerOrders.forEach(order => {
-            allOrders.push({
-                ...order,
-                customerUsername: customer.username,
-                customerName: customer.firstName + ' ' + customer.lastName
-            });
+            // Only include orders that were requested for this specific rider
+            if (order.riderNumber === riderNumber) {
+                allOrders.push({
+                    ...order,
+                    customerUsername: customer.username,
+                    customerName: customer.firstName + ' ' + customer.lastName
+                });
+            }
         });
     });
     
@@ -66,7 +79,7 @@ function loadAllOrders() {
     allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     if (allOrders.length === 0) {
-        ordersContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No orders available yet.</p>';
+        ordersContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No orders available for you yet.</p>';
         return;
     }
     
