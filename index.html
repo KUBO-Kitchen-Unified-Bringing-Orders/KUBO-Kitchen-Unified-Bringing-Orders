@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KUBO Riders List</title>
+    <title>KUBO - Kitchen Unified Bringing Orders</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <header class="navbar-container">
         <div class="navbar-content">
             <span class="logo">
@@ -16,46 +15,264 @@
                 KUBO
             </span>
             <nav>
-                <a href="index.html" id="home-link">Home</a>
-                <a href="about_us.html">About Us</a>
-                
-                <a href="login.html" class="login-button" id="login-profile-link">Login</a>
+                <a href="#" id="home-link" onclick="showPage('home'); return false;">Home</a>
+                <a href="#" onclick="showPage('about'); return false;">About Us</a>
+                <a href="#" class="login-button" id="login-profile-link" onclick="handleAuthClick(event); return false;">Login</a>
             </nav>
         </div>
     </header>
 
-    <main class="rider-grid-container">
-        
-        <div class="rider-card">
-            <div class="photo-placeholder">Photo</div>
-            <div class="rider-name">Rider 1</div>
+    <!-- HOME PAGE -->
+    <main id="page-home" class="page-section">
+        <div class="rider-grid-container">
+            <div class="rider-card" onclick="showPage('rider-1')">
+                <div class="photo-placeholder">Photo</div>
+                <div class="rider-name">Rider 1</div>
+            </div>
+            <div class="rider-card" onclick="showPage('rider-2')">
+                <div class="photo-placeholder">Photo</div>
+                <div class="rider-name">Rider 2</div>
+            </div>
+            <div class="rider-card" onclick="showPage('rider-3')">
+                <div class="photo-placeholder">Photo</div>
+                <div class="rider-name">Rider 3</div>
+            </div>
+            <div class="rider-card" onclick="showPage('rider-4')">
+                <div class="photo-placeholder">Photo</div>
+                <div class="rider-name">Rider 4</div>
+            </div>
+            <div class="rider-card" onclick="showPage('rider-5')">
+                <div class="photo-placeholder">Photo</div>
+                <div class="rider-name">Rider 5</div>
+            </div>
+            <div class="rider-card-empty"></div>
         </div>
-
-        <div class="rider-card">
-            <div class="photo-placeholder">Photo</div>
-            <div class="rider-name">Rider 2</div>
-        </div>
-        
-        <div class="rider-card">
-            <div class="photo-placeholder">Photo</div>
-            <div class="rider-name">Rider 3</div>
-        </div>
-
-        <div class="rider-card">
-            <div class="photo-placeholder">Photo</div>
-            <div class="rider-name">Rider 4</div>
-        </div>
-
-        <div class="rider-card">
-            <div class="photo-placeholder">Photo</div>
-            <div class="rider-name">Rider 5</div>
-        </div>
-
-        <div class="rider-card-empty"></div>
-        
     </main>
 
-    <script src="auth.js"></script>
-    <script src="main.js"></script>
+    <!-- LOGIN PAGE -->
+    <main id="page-login" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card login-card">
+                <div class="info-section">
+                    <h2>USER LOGIN</h2>
+                    <div class="login-type-selector">
+                        <button class="login-type-btn active" data-type="customer">Customer Login</button>
+                        <button class="login-type-btn" data-type="rider">Rider Login</button>
+                    </div>
+                    <p id="login-description">Please enter your credentials to access your account.</p>
+                </div>
+                <div class="note-section login-form">
+                    <form action="#" method="POST" id="login-form">
+                        <label for="username">Username / ID:</label>
+                        <input type="text" id="username" name="username" required>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                        <button type="submit" class="done-button login-submit-button">Log In</button>
+                        <div class="login-links">
+                            <a href="#" class="forgot-password-link">Forgot Password?</a>
+                            <a href="#" class="create-account-link" id="create-account-link">Create Account</a>
+                        </div>
+                    </form>
+                    <form action="#" method="POST" id="create-account-form" class="create-account-form" style="display: none;">
+                        <h3>Create Customer Account</h3>
+                        <label for="first-name">First Name:</label>
+                        <input type="text" id="first-name" name="first-name" required>
+                        <label for="last-name">Last Name:</label>
+                        <input type="text" id="last-name" name="last-name" required>
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" required>
+                        <label for="new-username">Username:</label>
+                        <input type="text" id="new-username" name="new-username" required>
+                        <label for="new-password">Password:</label>
+                        <input type="password" id="new-password" name="new-password" required>
+                        <div class="gender-selection">
+                            <label>Gender:</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="gender" value="male" required>
+                                    <span>Male</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="gender" value="female" required>
+                                    <span>Female</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="register-button">Register</button>
+                        <a href="#" class="back-to-login-link" id="back-to-login-link">Back to Login</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PROFILE PAGE -->
+    <main id="page-profile" class="page-section" style="display: none;">
+        <div class="profile-page-container">
+            <div class="profile-layout">
+                <div class="profile-section">
+                    <h2 class="profile-title">MY PROFILE</h2>
+                    <div class="profile-info">
+                        <p><strong>Name:</strong> <span id="profile-name">-</span></p>
+                        <p><strong>Address:</strong> <span id="profile-address">-</span></p>
+                        <p><strong>Gender:</strong> <span id="profile-gender">-</span></p>
+                    </div>
+                    <button class="logout-button" id="logout-button">Log Out</button>
+                </div>
+                <div class="orders-section">
+                    <h2 class="orders-title">Orders/Deliveries</h2>
+                    <div class="orders-list" id="orders-list"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RIDER DASHBOARD PAGE -->
+    <main id="page-rider-dashboard" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>RIDER DASHBOARD</h2>
+                    <p id="rider-welcome">Welcome, <span id="rider-name-display">-</span></p>
+                    <button class="logout-button" id="rider-logout-button" style="margin-top: 15px;">Logout</button>
+                </div>
+                <div class="note-section">
+                    <h3 style="margin-top: 0; margin-bottom: 20px; color: #333;">Available Orders</h3>
+                    <div id="orders-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ABOUT US PAGE -->
+    <main id="page-about" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>OUR MISSION: KUBO DELIVERY</h2>
+                    <p>KUBO connects customers with nearby food delivery riders. Our platform makes it easy to see who's available, their ratings, and how close they are to you. We aim to make every delivery fast, reliable, and convenient bringing good food and great service closer to your door.</p>
+                    <p>With KUBO, food delivery becomes easier, faster, and more personal, giving you full control and a smoother experience from order to delivery.</p>
+                </div>
+                <div class="note-section">
+                    <label>Contact Us:</label>
+                    <ul>
+                        <li><a href="mailto:20240592@nbsc.edu.ph">20240592@nbsc.edu.ph</a></li>
+                        <li><a href="mailto:20241506@nbsc.edu.ph">20241506@nbsc.edu.ph</a></li>
+                        <li><a href="mailto:20241507@nbsc.edu.ph">20241507@nbsc.edu.ph</a></li>
+                        <li><a href="mailto:20241508@nbsc.edu.ph">20241508@nbsc.edu.ph</a></li>
+                        <li><a href="mailto:20241516@nbsc.edu.ph">20241516@nbsc.edu.ph</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RIDER PAGES -->
+    <main id="page-rider-1" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>RIDER 1'S INFORMATION:</h2>
+                    <p><strong>Rider's Name:</strong> Arfrael Baldesco</p>
+                    <p><strong>Age:</strong> 19</p>
+                    <p><strong>Address:</strong> St. Joseph, Manolo Fortich, Bukidnon</p>
+                    <p><strong>Have driver's license(Yes/No):</strong> Yes</p>
+                    <p><strong>Contact Number:</strong> 09352587636</p>
+                    <p><strong>Status:</strong> Available for delivery</p>
+                </div>
+                <div class="note-section">
+                    <label for="rider-note-1">Note:</label>
+                    <textarea id="rider-note-1" rows="4"></textarea>
+                    <button class="done-button" data-rider="1">Done</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-rider-2" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>RIDER 2'S INFORMATION:</h2>
+                    <p><strong>Rider's Name:</strong> Enrick Jason Toribio</p>
+                    <p><strong>Age:</strong> 22</p>
+                    <p><strong>Address:</strong> St. Joseph, Manolo Fortich, Bukidnon</p>
+                    <p><strong>Have driver's license(Yes/No):</strong> Yes</p>
+                    <p><strong>Contact Number:</strong> 09999828560</p>
+                    <p><strong>Status:</strong> Available for delivery</p>
+                </div>
+                <div class="note-section">
+                    <label for="rider-note-2">Note:</label>
+                    <textarea id="rider-note-2" rows="4"></textarea>
+                    <button class="done-button" data-rider="2">Done</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-rider-3" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>RIDER 3'S INFORMATION:</h2>
+                    <p><strong>Rider's Name:</strong> Paul Kane Nicholas Lasagas</p>
+                    <p><strong>Age:</strong> 20</p>
+                    <p><strong>Address:</strong> St. Joseph, Manolo Fortich, Bukidnon</p>
+                    <p><strong>Have driver's license(Yes/No):</strong> Yes</p>
+                    <p><strong>Contact Number:</strong> 09362277159</p>
+                    <p><strong>Status:</strong> Available for delivery</p>
+                </div>
+                <div class="note-section">
+                    <label for="rider-note-3">Note:</label>
+                    <textarea id="rider-note-3" rows="4"></textarea>
+                    <button class="done-button" data-rider="3">Done</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-rider-4" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>RIDER 4'S INFORMATION:</h2>
+                    <p><strong>Rider's Name:</strong> Jasiel Dumana</p>
+                    <p><strong>Age:</strong> 20</p>
+                    <p><strong>Address:</strong> St. Joseph, Manolo Fortich, Bukidnon</p>
+                    <p><strong>Have driver's license(Yes/No):</strong> Yes</p>
+                    <p><strong>Contact Number:</strong> 09708984742</p>
+                    <p><strong>Status:</strong> Available for delivery</p>
+                </div>
+                <div class="note-section">
+                    <label for="rider-note-4">Note:</label>
+                    <textarea id="rider-note-4" rows="4"></textarea>
+                    <button class="done-button" data-rider="4">Done</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-rider-5" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>RIDER 5'S INFORMATION:</h2>
+                    <p><strong>Rider's Name:</strong> Alexander Dominic Figueroa</p>
+                    <p><strong>Age:</strong> 19</p>
+                    <p><strong>Address:</strong> St. Joseph, Manolo Fortich, Bukidnon</p>
+                    <p><strong>Have driver's license(Yes/No):</strong> Yes</p>
+                    <p><strong>Contact Number:</strong> 09677315838</p>
+                    <p><strong>Status:</strong> Available for delivery</p>
+                </div>
+                <div class="note-section">
+                    <label for="rider-note-5">Note:</label>
+                    <textarea id="rider-note-5" rows="4"></textarea>
+                    <button class="done-button" data-rider="5">Done</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>

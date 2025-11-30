@@ -12,41 +12,57 @@ body {
     min-height: 100vh; 
 }
 
+/* Page Section Styles for SPA */
+.page-section {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 
 .navbar-container {
     width: 100%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05); 
     background-color: #AB8864; 
-    padding: 10px 0;
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
-}
-
-.navbar-content {
-    width: 90%;
-    max-width: 1200px; 
+    padding: 7.5px 20px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    min-height: 50px;
+}
+
+.navbar-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
 }
 
 .logo {
-    font-size: 1.2em;
-    font-weight: 600;
+    font-size: 1.4em;
+    font-weight: 700;
     display: flex;
     align-items: center;
+    color: #FFFFFF;
 }
 
 .logo-img {
-    height: 50px; 
-    margin-right: 8px;
+    height: 70px; 
+    width: 70px;
+    margin-right: 10px;
+    object-fit: contain;
 }
 
 nav {
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-left: auto;
 }
 
 nav a {
@@ -74,8 +90,8 @@ nav a:hover {
     grid-template-columns: repeat(3, 1fr); 
     gap: 25px; 
     width: 90%;
-    max-width: 900px; 
-    justify-content: center; 
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 
