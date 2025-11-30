@@ -1,36 +1,26 @@
-// ============================================
-// KUBO - Consolidated JavaScript File
-// All functionality in one file
-// ============================================
-
-// ============================================
-// ROUTING SYSTEM
-// ============================================
-
-// Global variables for interval management
 let riderDashboardInterval = null;
 
 function showPage(pageId) {
-    // Clear any running intervals when switching pages
+
     if (riderDashboardInterval) {
         clearInterval(riderDashboardInterval);
         riderDashboardInterval = null;
     }
     
-    // Hide all pages
+
     const allPages = document.querySelectorAll('.page-section');
     allPages.forEach(page => page.style.display = 'none');
     
-    // Show requested page
+
     const targetPage = document.getElementById('page-' + pageId);
     if (targetPage) {
         targetPage.style.display = 'block';
     }
     
-    // Update navbar
+
     updateNavbarForLoginStatus();
     
-    // Initialize page-specific functionality
+
     if (pageId === 'home') {
         initHomePage();
     } else if (pageId === 'login') {
@@ -57,10 +47,6 @@ function handleAuthClick(event) {
         showPage('login');
     }
 }
-
-// ============================================
-// AUTHENTICATION & NAVBAR
-// ============================================
 
 function updateNavbarForLoginStatus() {
     const loginProfileLink = document.getElementById('login-profile-link');
@@ -96,9 +82,7 @@ function updateNavbarForLoginStatus() {
     }
 }
 
-// ============================================
 // HOME PAGE
-// ============================================
 
 function initHomePage() {
     const riderCards = document.querySelectorAll('.rider-card');
@@ -107,15 +91,12 @@ function initHomePage() {
     });
 }
 
-// ============================================
 // LOGIN PAGE
-// ============================================
 
-// Track if login page is initialized
 let loginPageInitialized = false;
 
 function initLoginPage() {
-    // Prevent multiple initializations
+
     if (loginPageInitialized) return;
     
     const customerBtn = document.querySelector('.login-type-btn[data-type="customer"]');
@@ -276,11 +257,8 @@ function initLoginPage() {
     loginPageInitialized = true;
 }
 
-// ============================================
 // PROFILE PAGE
-// ============================================
 
-// Track if profile page logout is initialized
 let profileLogoutInitialized = false;
 
 function initProfilePage() {
@@ -300,7 +278,6 @@ function initProfilePage() {
     
     loadOrders(customer.username);
     
-    // Only add logout listener once
     if (!profileLogoutInitialized) {
         const logoutButton = document.getElementById('logout-button');
         if (logoutButton) {
@@ -356,9 +333,7 @@ function createOrderElement(order) {
     return orderDiv;
 }
 
-// ============================================
 // RIDER DASHBOARD PAGE
-// ============================================
 
 function initRiderDashboard() {
     const currentRider = localStorage.getItem('currentRider');
@@ -372,7 +347,6 @@ function initRiderDashboard() {
     const rider = JSON.parse(currentRider);
     document.getElementById('rider-name-display').textContent = rider.riderName;
     
-    // Only set up logout button once
     const logoutButton = document.getElementById('rider-logout-button');
     if (logoutButton && !logoutButton.hasAttribute('data-initialized')) {
         logoutButton.onclick = function() {
@@ -385,7 +359,6 @@ function initRiderDashboard() {
     
     loadAllOrders();
     
-    // Clear existing interval before creating a new one
     if (riderDashboardInterval) {
         clearInterval(riderDashboardInterval);
     }
@@ -507,9 +480,7 @@ window.deliverOrder = function(orderId, customerUsername) {
     }
 };
 
-// ============================================
 // RIDER PAGES
-// ============================================
 
 const riderData = {
     1: { name: 'Arfrael Baldesco', number: 1 },
@@ -564,9 +535,7 @@ function initRiderPage(riderNum) {
     }
 }
 
-// ============================================
 // UTILITY FUNCTIONS
-// ============================================
 
 function getCustomerAccounts() {
     const accounts = localStorage.getItem('customerAccounts');
@@ -615,18 +584,14 @@ function getRiderInfo(username) {
     return riders[username] || null;
 }
 
-// ============================================
 // INITIALIZATION
-// ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Show home page by default
+
     showPage('home');
     
-    // Update navbar
     updateNavbarForLoginStatus();
     
-    // Set up About Us link
     const aboutLink = document.querySelector('nav a[onclick*="about"]');
     if (!aboutLink) {
         const nav = document.querySelector('nav');
