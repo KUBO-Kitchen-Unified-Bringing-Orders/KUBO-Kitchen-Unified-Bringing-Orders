@@ -29,9 +29,13 @@ function showPage(pageId) {
         initProfilePage();
     } else if (pageId === 'rider-dashboard') {
         initRiderDashboard();
+    } else if (pageId === 'rider-feedbacks') {
+        initRiderFeedbacks();
     } else if (pageId.startsWith('rider-')) {
         const riderNum = pageId.split('-')[1];
         initRiderPage(riderNum);
+    } else if (pageId === 'feedback') {
+        initFeedbackPage();
     }
 }
 
@@ -323,11 +327,24 @@ function createOrderElement(order) {
         displayStatus = 'Pending';
     } else if (order.status === 'Out for delivery') {
         displayStatus = 'Out for delivery';
+    } else if (order.status === 'Delivered') {
+        displayStatus = 'Delivered';
+    }
+    
+    // Make delivered orders clickable
+    const isDelivered = order.status === 'Delivered';
+    const hasFeedback = order.feedbackSubmitted;
+    
+    if (isDelivered) {
+        orderDiv.style.cursor = 'pointer';
+        orderDiv.addEventListener('click', function() {
+            showFeedbackPage(order);
+        });
     }
     
     orderDiv.innerHTML = `
         <p><strong>${order.note}</strong></p>
-        <p><strong>${displayStatus}</strong></p>
+        <p><strong>${displayStatus}</strong>${isDelivered && !hasFeedback ? ' (Click to rate)' : ''}${hasFeedback ? ' ✓ Feedback submitted' : ''}</p>
     `;
     
     return orderDiv;
@@ -363,6 +380,15 @@ function initRiderDashboard() {
         clearInterval(riderDashboardInterval);
     }
     riderDashboardInterval = setInterval(loadAllOrders, 5000);
+    
+    // Set up feedbacks button
+    const feedbacksButton = document.getElementById('feedbacks-button');
+    if (feedbacksButton && !feedbacksButton.hasAttribute('data-initialized')) {
+        feedbacksButton.onclick = function() {
+            showPage('rider-feedbacks');
+        };
+        feedbacksButton.setAttribute('data-initialized', 'true');
+    }
 }
 
 function loadAllOrders() {
@@ -427,6 +453,7 @@ function createOrderCard(order) {
     const isAccepted = order.acceptedBy && order.acceptedBy === currentRider.username;
     const canAccept = !order.acceptedBy;
     const canDeliver = isAccepted && order.status === 'Pending';
+    const canMarkDone = isAccepted && order.status === 'Out for delivery';
     
     orderDiv.innerHTML = `
         <div class="order-header">
@@ -442,7 +469,7 @@ function createOrderCard(order) {
         <div class="order-actions">
             ${canAccept ? `<button class="accept-button" onclick="acceptOrder('${order.id}', '${order.customerUsername}')">Accept Order</button>` : ''}
             ${canDeliver ? `<button class="deliver-button" onclick="deliverOrder('${order.id}', '${order.customerUsername}')">Deliver</button>` : ''}
-            ${isAccepted && order.status === 'Out for delivery' ? '<p style="color: #376C9B; font-weight: 600;">You are delivering this order</p>' : ''}
+            ${canMarkDone ? `<button class="done-order-button" onclick="markOrderDone('${order.id}', '${order.customerUsername}')">Done</button>` : ''}
         </div>
     `;
     
@@ -476,6 +503,21 @@ window.deliverOrder = function(orderId, customerUsername) {
         orders[orderIndex].deliveredAt = new Date().toISOString();
         localStorage.setItem(ordersKey, JSON.stringify(orders));
         alert('Order is now out for delivery!');
+        loadAllOrders();
+    }
+};
+
+window.markOrderDone = function(orderId, customerUsername) {
+    const currentRider = JSON.parse(localStorage.getItem('currentRider'));
+    const ordersKey = 'customerOrders_' + customerUsername;
+    const orders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+    const orderIndex = orders.findIndex(o => o.id == orderId);
+    
+    if (orderIndex !== -1 && orders[orderIndex].acceptedBy === currentRider.username && orders[orderIndex].status === 'Out for delivery') {
+        orders[orderIndex].status = 'Delivered';
+        orders[orderIndex].completedAt = new Date().toISOString();
+        localStorage.setItem(ordersKey, JSON.stringify(orders));
+        alert('Order marked as delivered!');
         loadAllOrders();
     }
 };
@@ -582,6 +624,227 @@ function getRiderInfo(username) {
     };
     
     return riders[username] || null;
+}
+
+// ============================================
+// FEEDBACK PAGE
+// ============================================
+
+let currentFeedbackOrder = null;
+
+function showFeedbackPage(order) {
+    currentFeedbackOrder = order;
+    showPage('feedback');
+}
+
+function initFeedbackPage() {
+    if (!currentFeedbackOrder) {
+        showPage('profile');
+        return;
+    }
+    
+    const orderInfo = document.getElementById('feedback-order-info');
+    orderInfo.textContent = `Order ID: ${currentFeedbackOrder.id} | Rider: ${currentFeedbackOrder.riderName}`;
+    
+    // Reset ratings
+    document.getElementById('rider-rating-value').value = '0';
+    document.getElementById('kubo-rating-value').value = '0';
+    document.getElementById('feedback-text').value = '';
+    
+    // Reset star displays
+    resetStarRating('rider-rating');
+    resetStarRating('kubo-rating');
+    
+    // Set up star rating handlers
+    setupStarRating('rider-rating', 'rider-rating-value');
+    setupStarRating('kubo-rating', 'kubo-rating-value');
+    
+    // Handle form submission
+    const feedbackForm = document.getElementById('feedback-form');
+    if (feedbackForm) {
+        feedbackForm.onsubmit = function(e) {
+            e.preventDefault();
+            submitFeedback();
+        };
+    }
+}
+
+function setupStarRating(ratingId, valueInputId) {
+    const ratingContainer = document.getElementById(ratingId);
+    const stars = ratingContainer.querySelectorAll('.star');
+    const valueInput = document.getElementById(valueInputId);
+    
+    stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(star.dataset.rating);
+            valueInput.value = rating;
+            highlightStars(ratingId, rating);
+        });
+        
+        star.addEventListener('mouseenter', function() {
+            const rating = parseInt(star.dataset.rating);
+            highlightStars(ratingId, rating);
+        });
+    });
+    
+    ratingContainer.addEventListener('mouseleave', function() {
+        const currentRating = parseInt(valueInput.value) || 0;
+        highlightStars(ratingId, currentRating);
+    });
+}
+
+function highlightStars(ratingId, rating) {
+    const stars = document.querySelectorAll(`#${ratingId} .star`);
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.classList.add('active');
+        } else {
+            star.classList.remove('active');
+        }
+    });
+}
+
+function resetStarRating(ratingId) {
+    const stars = document.querySelectorAll(`#${ratingId} .star`);
+    stars.forEach(star => star.classList.remove('active'));
+}
+
+function submitFeedback() {
+    const riderRating = parseInt(document.getElementById('rider-rating-value').value);
+    const kuboRating = parseInt(document.getElementById('kubo-rating-value').value);
+    const feedbackText = document.getElementById('feedback-text').value.trim();
+    
+    if (riderRating === 0 || kuboRating === 0) {
+        alert('Please rate both the rider performance and KUBO services!');
+        return;
+    }
+    
+    const feedback = {
+        orderId: currentFeedbackOrder.id,
+        customerUsername: JSON.parse(localStorage.getItem('currentCustomer')).username,
+        riderName: currentFeedbackOrder.riderName,
+        riderRating: riderRating,
+        kuboRating: kuboRating,
+        feedbackText: feedbackText,
+        submittedAt: new Date().toISOString()
+    };
+    
+    // Save feedback
+    const feedbacks = JSON.parse(localStorage.getItem('orderFeedbacks') || '[]');
+    // Remove existing feedback for this order if any
+    const filteredFeedbacks = feedbacks.filter(f => f.orderId !== currentFeedbackOrder.id);
+    filteredFeedbacks.push(feedback);
+    localStorage.setItem('orderFeedbacks', JSON.stringify(filteredFeedbacks));
+    
+    // Mark order as feedback submitted
+    const customer = JSON.parse(localStorage.getItem('currentCustomer'));
+    const ordersKey = 'customerOrders_' + customer.username;
+    const orders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+    const orderIndex = orders.findIndex(o => o.id === currentFeedbackOrder.id);
+    if (orderIndex !== -1) {
+        orders[orderIndex].feedbackSubmitted = true;
+        localStorage.setItem(ordersKey, JSON.stringify(orders));
+    }
+    
+    alert('Thank you for your feedback!');
+    showPage('profile');
+    currentFeedbackOrder = null;
+}
+
+// ============================================
+// RIDER FEEDBACKS PAGE
+// ============================================
+
+function initRiderFeedbacks() {
+    const currentRider = localStorage.getItem('currentRider');
+    
+    if (!currentRider) {
+        alert('Please login as a rider to view feedbacks.');
+        showPage('login');
+        return;
+    }
+    
+    const rider = JSON.parse(currentRider);
+    document.getElementById('rider-feedbacks-name').textContent = rider.riderName;
+    
+    loadRiderFeedbacks(rider.riderName);
+}
+
+function loadRiderFeedbacks(riderName) {
+    const feedbacksContainer = document.getElementById('feedbacks-container');
+    if (!feedbacksContainer) return;
+    
+    feedbacksContainer.innerHTML = '';
+    
+    // Get all feedbacks
+    const allFeedbacks = JSON.parse(localStorage.getItem('orderFeedbacks') || '[]');
+    
+    // Filter feedbacks for this specific rider
+    const riderFeedbacks = allFeedbacks.filter(feedback => feedback.riderName === riderName);
+    
+    if (riderFeedbacks.length === 0) {
+        feedbacksContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No feedbacks received yet.</p>';
+        return;
+    }
+    
+    // Sort by submission date (newest first)
+    riderFeedbacks.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    
+    // Display each feedback
+    riderFeedbacks.forEach(feedback => {
+        const feedbackElement = createFeedbackCard(feedback);
+        feedbacksContainer.appendChild(feedbackElement);
+    });
+}
+
+function createFeedbackCard(feedback) {
+    const feedbackDiv = document.createElement('div');
+    feedbackDiv.className = 'feedback-card';
+    
+    // Get customer name
+    const customerAccounts = JSON.parse(localStorage.getItem('customerAccounts') || '[]');
+    const customer = customerAccounts.find(c => c.username === feedback.customerUsername);
+    const customerName = customer ? customer.firstName + ' ' + customer.lastName : feedback.customerUsername;
+    
+    // Create star display for rider rating
+    const riderStars = generateStars(feedback.riderRating);
+    const kuboStars = generateStars(feedback.kuboRating);
+    
+    feedbackDiv.innerHTML = `
+        <div class="feedback-header">
+            <h4>Feedback from ${customerName}</h4>
+            <span class="feedback-date">${formatDate(feedback.submittedAt)}</span>
+        </div>
+        <div class="feedback-details">
+            <div class="feedback-rating">
+                <p><strong>Rider Performance:</strong> ${riderStars} (${feedback.riderRating}/5)</p>
+            </div>
+            <div class="feedback-rating">
+                <p><strong>KUBO Services:</strong> ${kuboStars} (${feedback.kuboRating}/5)</p>
+            </div>
+            ${feedback.feedbackText ? `<div class="feedback-text"><p><strong>Comment:</strong> ${feedback.feedbackText}</p></div>` : ''}
+            <p style="margin-top: 10px; color: #666; font-size: 0.9em;"><strong>Order ID:</strong> ${feedback.orderId}</p>
+        </div>
+    `;
+    
+    return feedbackDiv;
+}
+
+function generateStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars += '<span class="star-display active">★</span>';
+        } else {
+            stars += '<span class="star-display">★</span>';
+        }
+    }
+    return stars;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 // INITIALIZATION

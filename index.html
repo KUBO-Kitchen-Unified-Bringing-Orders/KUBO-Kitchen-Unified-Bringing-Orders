@@ -26,23 +26,33 @@
     <main id="page-home" class="page-section">
         <div class="rider-grid-container">
             <div class="rider-card" onclick="showPage('rider-1')">
-                <div class="photo-placeholder">Photo</div>
+                <div class="photo-placeholder">
+                    <img src="rider1.png" alt="Rider 1" class="rider-photo">
+                </div>
                 <div class="rider-name">Rider 1</div>
             </div>
             <div class="rider-card" onclick="showPage('rider-2')">
-                <div class="photo-placeholder">Photo</div>
+                <div class="photo-placeholder">
+                    <img src="rider2.png" alt="Rider 2" class="rider-photo">
+                </div>
                 <div class="rider-name">Rider 2</div>
             </div>
             <div class="rider-card" onclick="showPage('rider-3')">
-                <div class="photo-placeholder">Photo</div>
+                <div class="photo-placeholder">
+                    <img src="rider3.png" alt="Rider 3" class="rider-photo">
+                </div>
                 <div class="rider-name">Rider 3</div>
             </div>
             <div class="rider-card" onclick="showPage('rider-4')">
-                <div class="photo-placeholder">Photo</div>
+                <div class="photo-placeholder">
+                    <img src="rider4.png" alt="Rider 4" class="rider-photo">
+                </div>
                 <div class="rider-name">Rider 4</div>
             </div>
             <div class="rider-card" onclick="showPage('rider-5')">
-                <div class="photo-placeholder">Photo</div>
+                <div class="photo-placeholder">
+                    <img src="rider5.png" alt="Rider 5" class="rider-photo">
+                </div>
                 <div class="rider-name">Rider 5</div>
             </div>
             <div class="rider-card-empty"></div>
@@ -134,7 +144,10 @@
                 <div class="info-section">
                     <h2>RIDER DASHBOARD</h2>
                     <p id="rider-welcome">Welcome, <span id="rider-name-display">-</span></p>
-                    <button class="logout-button" id="rider-logout-button" style="margin-top: 15px;">Logout</button>
+                    <div class="button-group">
+                        <button class="feedbacks-button" id="feedbacks-button">Feedbacks</button>
+                        <button class="logout-button" id="rider-logout-button">Logout</button>
+                    </div>
                 </div>
                 <div class="note-section">
                     <h3 style="margin-top: 0; margin-bottom: 20px; color: #333;">Available Orders</h3>
@@ -268,6 +281,70 @@
                     <label for="rider-note-5">Note:</label>
                     <textarea id="rider-note-5" rows="4"></textarea>
                     <button class="done-button" data-rider="5">Done</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RIDER FEEDBACKS PAGE -->
+    <main id="page-rider-feedbacks" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>FEEDBACKS RECEIVED</h2>
+                    <p id="rider-feedbacks-welcome">Welcome, <span id="rider-feedbacks-name">-</span></p>
+                    <button class="back-to-dashboard-button" onclick="showPage('rider-dashboard'); return false;" style="margin-top: 15px;">Back to Dashboard</button>
+                </div>
+                <div class="note-section">
+                    <h3 style="margin-top: 0; margin-bottom: 20px; color: #333;">Customer Feedbacks</h3>
+                    <div id="feedbacks-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FEEDBACK PAGE -->
+    <main id="page-feedback" class="page-section" style="display: none;">
+        <div class="details-page-container">
+            <div class="rider-info-card">
+                <div class="info-section">
+                    <h2>FEEDBACK</h2>
+                    <p id="feedback-order-info">Order Information</p>
+                </div>
+                <div class="note-section">
+                    <form id="feedback-form">
+                        <div class="rating-section">
+                            <label>Rate Rider Performance:</label>
+                            <div class="star-rating" id="rider-rating">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                            <input type="hidden" id="rider-rating-value" name="rider-rating" value="0">
+                        </div>
+
+                        <div class="rating-section" style="margin-top: 25px;">
+                            <label>Rate KUBO Services:</label>
+                            <div class="star-rating" id="kubo-rating">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                            <input type="hidden" id="kubo-rating-value" name="kubo-rating" value="0">
+                        </div>
+
+                        <div class="feedback-text-section" style="margin-top: 25px;">
+                            <label for="feedback-text">Your Feedback:</label>
+                            <textarea id="feedback-text" name="feedback-text" rows="5" placeholder="Share your experience..."></textarea>
+                        </div>
+
+                        <button type="submit" class="done-button" style="margin-top: 20px;">Submit Feedback</button>
+                        <a href="#" class="back-to-profile-link" onclick="showPage('profile'); return false;" style="display: block; text-align: center; margin-top: 15px; color: #376C9B; text-decoration: none;">Back to Profile</a>
+                    </form>
                 </div>
             </div>
         </div>
