@@ -1,26 +1,59 @@
 let riderDashboardInterval = null;
 
 function showPage(pageId) {
-
+    // Clear intervals
     if (riderDashboardInterval) {
         clearInterval(riderDashboardInterval);
         riderDashboardInterval = null;
     }
     
-
-    const allPages = document.querySelectorAll('.page-section');
-    allPages.forEach(page => page.style.display = 'none');
-    
-
+    // Get current active page
+    const currentPage = document.querySelector('.page-section[style*="block"]');
     const targetPage = document.getElementById('page-' + pageId);
-    if (targetPage) {
+    
+    if (!targetPage) return;
+    
+    // Fade out current page, then fade in new page
+    if (currentPage && currentPage !== targetPage) {
+        currentPage.style.opacity = '0';
+        currentPage.style.transform = 'translateY(10px)';
+        
+        setTimeout(() => {
+            const allPages = document.querySelectorAll('.page-section');
+            allPages.forEach(page => {
+                page.style.display = 'none';
+                page.style.opacity = '0';
+                page.style.transform = 'translateY(10px)';
+            });
+            
+            targetPage.style.display = 'block';
+            // Trigger reflow
+            targetPage.offsetHeight;
+            targetPage.style.opacity = '1';
+            targetPage.style.transform = 'translateY(0)';
+            
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 150);
+    } else {
+        // First load or same page
+        const allPages = document.querySelectorAll('.page-section');
+        allPages.forEach(page => {
+            page.style.display = 'none';
+            page.style.opacity = '0';
+            page.style.transform = 'translateY(10px)';
+        });
+        
         targetPage.style.display = 'block';
+        setTimeout(() => {
+            targetPage.style.opacity = '1';
+            targetPage.style.transform = 'translateY(0)';
+        }, 10);
     }
     
-
     updateNavbarForLoginStatus();
     
-
+    // Initialize page-specific functions
     if (pageId === 'home') {
         initHomePage();
     } else if (pageId === 'login') {
