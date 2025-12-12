@@ -396,22 +396,26 @@ nav a:active {
 }
 
 /* Submit button */
-.send-message-btn {
-    width: 180px;
-    padding: 12px;
-    background-color: #376C9B;
-    color: #fff;
+#sendBtn {
+    background: #4c8ff7;
+    color: white;
+    padding: 12px 20px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
-    font-size: 15px;
     font-weight: 600;
-    margin-top: 5px;
     transition: 0.2s ease-in-out;
 }
 
-.send-message-btn:hover {
-    background-color: #2e5c85;
+#sendBtn:hover {
+    background: #3a76d8;
+    transform: translateY(-2px);
+}
+
+#sendBtn:active {
+    background: #335fa8;
+    transform: scale(0.98);
 }
 
 .email-list {

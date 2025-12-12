@@ -922,4 +922,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+document.getElementById("sendBtn").addEventListener("click", function () {
+    // Your message logic here
+    
+    alert("Message sent successfully!");
+});
 
