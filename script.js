@@ -88,6 +88,13 @@ function handleAuthClick(event) {
 function updateNavbarForLoginStatus() {
     const loginProfileLink = document.getElementById('login-profile-link');
     const homeLink = document.getElementById('home-link');
+    const nav = document.querySelector('nav');
+    
+    // Remove existing logout button if present
+    const existingLogout = document.getElementById('navbar-logout-button');
+    if (existingLogout) {
+        existingLogout.remove();
+    }
     
     const currentCustomer = localStorage.getItem('currentCustomer');
     const currentRider = localStorage.getItem('currentRider');
@@ -100,6 +107,21 @@ function updateNavbarForLoginStatus() {
         if (homeLink) {
             homeLink.style.display = 'none';
         }
+
+        // Add logout button next to Dashboard
+        const logoutButton = document.createElement('a');
+        logoutButton.href = '#';
+        logoutButton.id = 'navbar-logout-button';
+        logoutButton.className = 'navbar-logout-button';
+        logoutButton.textContent = 'Logout';
+        logoutButton.onclick = function(e) {
+            e.preventDefault();
+            localStorage.removeItem('currentRider');
+            alert('You have been logged out successfully.');
+            showPage('home');
+            return false;
+        };
+        nav.appendChild(logoutButton);
     } else if (currentCustomer) {
         if (loginProfileLink) {
             loginProfileLink.textContent = 'Profile';
@@ -108,6 +130,21 @@ function updateNavbarForLoginStatus() {
         if (homeLink) {
             homeLink.style.display = 'block';
         }
+
+        // Add logout button next to Profile
+        const logoutButton = document.createElement('a');
+        logoutButton.href = '#';
+        logoutButton.id = 'navbar-logout-button';
+        logoutButton.className = 'navbar-logout-button';
+        logoutButton.textContent = 'Logout';
+        logoutButton.onclick = function(e) {
+            e.preventDefault();
+            localStorage.removeItem('currentCustomer');
+            alert('You have been logged out successfully.');
+            showPage('home');
+            return false;
+        };
+        nav.appendChild(logoutButton);
     } else {
         if (loginProfileLink) {
             loginProfileLink.textContent = 'Login';
@@ -296,8 +333,6 @@ function initLoginPage() {
 
 // PROFILE PAGE
 
-let profileLogoutInitialized = false;
-
 function initProfilePage() {
     const currentCustomer = localStorage.getItem('currentCustomer');
     
@@ -314,18 +349,6 @@ function initProfilePage() {
     document.getElementById('profile-gender').textContent = customer.gender.charAt(0).toUpperCase() + customer.gender.slice(1);
     
     loadOrders(customer.username);
-    
-    if (!profileLogoutInitialized) {
-        const logoutButton = document.getElementById('logout-button');
-        if (logoutButton) {
-            logoutButton.addEventListener('click', function() {
-                localStorage.removeItem('currentCustomer');
-                alert('You have been logged out successfully.');
-                showPage('home');
-            });
-            profileLogoutInitialized = true;
-        }
-    }
 }
 
 function loadOrders(username) {
@@ -375,9 +398,11 @@ function createOrderElement(order) {
         });
     }
     
+    const statusClass = `status-${order.status.toLowerCase().replace(/ /g, '-')}`;
+
     orderDiv.innerHTML = `
         <p><strong>${order.note}</strong></p>
-        <p><strong>${displayStatus}</strong>${isDelivered && !hasFeedback ? ' (Click to rate)' : ''}${hasFeedback ? ' ✓ Feedback submitted' : ''}</p>
+        <p><span class="order-status-badge ${statusClass}">${displayStatus}</span>${isDelivered && !hasFeedback ? ' (Click to rate)' : ''}${hasFeedback ? ' ✓ Feedback submitted' : ''}</p>
     `;
     
     return orderDiv;
